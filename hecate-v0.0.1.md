@@ -36,7 +36,7 @@ This section describes the various primitive types of Hecate. Primitive types ar
 Hecate supports a whole range of different signed and unsigned integer types. These are the signed types `i8, i16, i32, i64, i128` and the unsigned types `u8, u16, u32, u64, u128`. The number of a type denotes its bit size. Supported integer formats are decimal, hexadecimal, binary and octal.
 
 ### Floating-point Types
-Like in most programming languages, two differently sized floating-point numbers are available, namely `f32` and `f64`. 
+Like in most programming languages, two differently sized floating-point numbers are available, namely `f32` and `f64`. Both decimal and fractional part are currently required. The scientific notation is also supported.
 
 ### Boolean Type
 Booleans are named `bool` in Hecate. 
@@ -280,7 +280,7 @@ product = product "*" sum | product "/" sum | product "%" sum | sum;
 sum = sum "+" unary | sum "-" unary | unary;
 unary = "!" unary | "-" unary | "+" unary | cast_expr;
 cast_expr = value ":" type;
-value = identifier | "(" expression ")" | scope_expression | if_expression | typed_integer | boolean | rational | function_call | "()";
+value = identifier | "(" expression ")" | scope_expression | if_expression | typed_integer | boolean | scientific_rational | function_call | "()";
 
 scope_expression  = "{" statements "}" | "{" statements expression "}";
 if_expression = "if" expression scope_expression | "if" expression scope_expression "else" if_expression | "if" expression scope_expression "else" scope_expression; 
@@ -301,6 +301,7 @@ dec_digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 hex_digit = dec_digit | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f";
 
 boolean = "true" | "false";
+scientific_rational = rational | rational "e" integer | rational "e" "-" integer;
 rational = integer "." integer;
 
 identifier = alpha_underscore alpha_numeric_seq;
