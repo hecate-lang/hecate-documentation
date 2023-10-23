@@ -30,6 +30,11 @@ This is the first specification of a subset of the Hecate programming language. 
 
 ## Primitive Types
 
+```
+Grammar: 
+type = "i8" | "i16" | "i32" | "i64" | "i128" | "u8" | "u16" | "u32" | "u64" | "u128" | "bool" | "()" | "!" | "f32" | "f64";
+```
+
 This section describes the various primitive types of Hecate. Primitive types are copy by default. 
 
 ### Integer Types
@@ -44,6 +49,20 @@ Booleans are named `bool` in Hecate.
 ## Functions
 
 ```
+Grammar: 
+function_definition = "fun" identifier "(" argument_signatures ")" scope_expression;
+function_definition = "fun" identifier "(" argument_signatures ")" "->" type scope_expression;
+function_definition = "fun" identifier "(" argument_signatures ")" "->" type "=" expression ";";
+function_definition = "fun" identifier "(" argument_signatures ")" "=" expression ";";
+function_definition = "fun" identifier "(" ")" scope_expression;
+function_definition = "fun" identifier "(" ")" "->" type scope_expression;
+function_definition = "fun" identifier "(" ")" "->" type "=" expression ";";
+function_definition = "fun" identifier "(" ")" "=" expression ";";
+```
+
+Functions are defined using the `fun` keyword followed by the function name, function args (put in parenthesis), return type and finally the function body. If no return type is desired, it can simply be omitted. Note that a type must be specified for arguments.
+
+```
 // a function mapping an i32 to an i32
 fun foo(bar: i32) -> i32 {
     bar * bar
@@ -54,7 +73,7 @@ fun foobar() {
 }
 ```
 
-Functions are defined using the `fun` keyword followed by the function name, function args (put in parenthesis), return type and finally the function body. If no return type is desired, it can simply be omitted. Note that a type must be specified for arguments. In case the function body consists of a single expression only, one can use an alternative formatting:
+In case the function body consists of a single expression only, one can use an alternative formatting:
 
 ```
 fun foo(bar: i32) -> i32 = bar * bar;
@@ -64,6 +83,11 @@ Please note that Hecate does not support function overloading.
 Function bodies are considered scope expressions. For more detailed information on them refer to the [corresponding section](#scope-expressions)
 
 ### return Keyword
+
+```
+Grammar:
+return_expression = "return" | "return" expression; 
+```
 
 To return early form a function use `return`:
 
@@ -97,6 +121,11 @@ fun entry() {
 ## Statements
 
 ### Let Bindings
+
+```
+Grammar:
+let_binding = "let" identifier ":" type "=" expression ";";
+```
 
 You can use let bindings to define a variable. Note that all variables are immutable by default. A type annotation is currently required.
 
@@ -141,6 +170,12 @@ Compatibility with types:
 |       Boolean        |       ✗       |       ✓       |
 
 ### Type Casts
+
+```
+Grammar:
+cast_expr = value ":" type;
+```
+
 Hecate doesn't allow implicit type conversions. Therefore you have to explicitly specify which type you want to convert to. This is simply done by using the type-cast operator(:) to supply a type annotation for a value:
 ```
 let a: i32 = 10 + (0.5: i32); // casts from f32 / f64 to i32
@@ -163,6 +198,13 @@ Operators with a higher precedence are applied before operators with a lower pre
 | type-cast operator : |     7      |
 
 ### Function Calls
+
+```
+Grammar:
+function_call = identifier "(" expression_sequence ")" | identifier "(" ")";
+expression_sequence = expression_sequence "," expression | expression;
+```
+
 A function can be called by entering the function name followed by a comma seperated list of argument expressions enclosed by parenthesis:
 ```
 fun foo(first: i32, second: i32) -> i32 {
@@ -177,6 +219,12 @@ fun entry() {
 The only exception is the `entry` function. As this represents the entry point of the program, it can not be called inside the program itself.
 
 ### Scope Expressions
+
+```
+Grammar:
+scope_expression  = "{" statements "}" | "{" statements expression "}";
+```
+
 Scope expressions are defined as a sequence of statements embraced by curly parenthesis. Every return value of a scope expression must have the same type. One can also optionally supply an expression at the end of a scope which is what the scope evaluates to. 
 
 ```
@@ -189,6 +237,12 @@ Scope expressions are defined as a sequence of statements embraced by curly pare
 Scope expressions that don't return anything return the unit type by default.
 
 ### If Expression
+
+```
+Grammar:
+if_expression = "if" expression scope_expression | "if" expression scope_expression "else" if_expression | "if" expression scope_expression "else" scope_expression; 
+```
+
 To create an if expression, enter the `if` keyword followed by the condition and the scoped block that is executed when the condition succeeds:
 
 ```
