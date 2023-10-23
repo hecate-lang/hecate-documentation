@@ -287,7 +287,8 @@ if_expression = "if" expression scope_expression | "if" expression scope_express
 function_call = identifier "(" expression_sequence ")" | identifier "(" ")";
 expression_sequence = expression_sequence "," expression | expression;
 
-statments = if_expression | scope_expression | expression ";";
+statments = if_expression | scope_expression | expression ";" | let_binding;
+let_binding = "let" identifier ":" type "=" expression ";";
 
 typed_integer = integer | integer type;
 integer = "0b" bin_integer | "0o" oct_integer | "0d" decimal_integer | decimal_integer | "ox" hex_integer;
