@@ -60,7 +60,7 @@ function_definition = "fun" identifier "(" ")" "->" type "=" expression ";";
 function_definition = "fun" identifier "(" ")" "=" expression ";";
 ```
 
-Functions are defined using the `fun` keyword followed by the function name, function args (put in parenthesis), return type and finally the function body. If no return type is desired, it can simply be omitted. Note that a type must be specified for arguments.
+Functions are defined using the `fun` keyword followed by the function name, function args (put in parenthesis), return type and finally the function body. If no return type is desired, the unit type is inferred. Note that a type must be specified for arguments.
 
 ```
 // a function mapping an i32 to an i32
