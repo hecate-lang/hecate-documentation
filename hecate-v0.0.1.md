@@ -234,7 +234,7 @@ If expressions that do not have an else case implicitly return the unit type. Th
 The unit type is returned by expressions and functions that do not return anything. It is denoted as the empty tuple `()`. The unit can be used in the same way as any other type.
 
 ## Never Type
-The never type can never be constructed. Its is mainly used for compile time type checks and promises that code is unreachable. The never type is represented by `!`. It is currently not in use but is reserved for future versions.
+The never type can never be constructed. It is mainly used for compile-time type checks and promises that code is unreachable. The never type is represented by `!`. Even though currently not in use, it is reserved for future versions.
 
 ## Comments
 Hecate uses C-style comments like so:
