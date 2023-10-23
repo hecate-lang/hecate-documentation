@@ -33,7 +33,7 @@ This is the first specification of a subset of the Hecate programming language. 
 This section describes the various primitive types of Hecate. Primitive types are copy by default. 
 
 ### Integer Types
-Hecate supports a whole range of different signed and unsigned integer types. These are the signed types `i8, i16, i32, i64, i128` and the unsigned types `u8, u16, u32, u64, u128`. The number of a type denotes its bit size.
+Hecate supports a whole range of different signed and unsigned integer types. These are the signed types `i8, i16, i32, i64, i128` and the unsigned types `u8, u16, u32, u64, u128`. The number of a type denotes its bit size. Supported integer formats are decimal, hexadecimal, binary and octal.
 
 ### Floating-point Types
 Like in most programming languages, two differently sized floating-point numbers are available, namely `f32` and `f64`. 
@@ -114,7 +114,7 @@ let a_var: bool = true;
 ```
 
 ### Expressions as statements
-Every expression can be turned into a statement in Hecate. Expressions ending with a curly parenthesis are implicitly converted to expressions and their evaluated value gets discarded (this affects primarily if, while and for expressions). All other expressions not ending in a curly parenthesis can be explicitly converted by appending a semicolon.
+Adding a semicolon to the end of an expression turns it into a statement which discards its resulting value. A block expression, as can be found with an if, loop or simply a scope block functions automatically as a statement and may not have a semicolon. Please note that assigning the value of a block to a variable does require a semicolon, which belongs to the assignment statement and not to the block.
 
 ## Expressions
 
@@ -231,10 +231,10 @@ if a == 0 {
 If expressions that do not have an else case implicitly return the unit type. This implies that all branches of the if expression have to return the unit type too.
 
 ## Unit Type
-The unit type is returned by expressions and functions that do not return anything. It is denotes as the empty tuple `()`. The unit can be used in the same way as any other type.
+The unit type is returned by expressions and functions that do not return anything. It is denoted as the empty tuple `()`. The unit can be used in the same way as any other type.
 
 ## Never Type
-The never type can never be constructed. Trying to do so will result in an unrecoverable panic that terminates the program. The never type is represented by `!`. It is currently not in use but is reserved for future versions.
+The never type can never be constructed. Its is mainly used for compile time type checks and promises that code is unreachable. The never type is represented by `!`. It is currently not in use but is reserved for future versions.
 
 ## Comments
 Hecate uses C-style comments like so:
@@ -280,7 +280,7 @@ product = product "*" sum | product "/" sum | product "%" sum | sum;
 sum = sum "+" unary | sum "-" unary | unary;
 unary = "!" unary | "-" unary | "+" unary | cast_expr;
 cast_expr = value ":" type;
-value = identifier | "(" expression ")" | scope_expression | if_expression | integer | boolean | rational | function_call | "()";
+value = identifier | "(" expression ")" | scope_expression | if_expression | typed_integer | boolean | rational | function_call | "()";
 
 scope_expression  = "{" statements "}" | "{" statements expression "}";
 if_expression = "if" expression scope_expression | "if" expression scope_expression "else" if_expression | "if" expression scope_expression "else" scope_expression; 
@@ -289,14 +289,23 @@ expression_sequence = expression_sequence "," expression | expression;
 
 statments = if_expression | scope_expression | expression ";";
 
-integer = integer digit | digit;
-digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+typed_integer = integer | integer type;
+integer = "0b" bin_integer | "0o" oct_integer | "0d" decimal_integer | decimal_integer | "ox" hex_integer;
+bin_integer = bin_integer bin_digit | bin_digit;
+oct_integer = oct_integer oct_digit | oct_digit;
+dec_integer = dec_integer dec_digit | dec_digit;
+hex_integer = hex_integer hex_digit | hex_digit;
+bin_digit = "0" | "1";
+oct_digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7";
+dec_digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+hex_digit = dec_digit | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f";
+
 boolean = "true" | "false";
 rational = integer "." integer;
 
 identifier = alpha_underscore alpha_numeric_seq;
 alpha_numeric_seq = alpha_numeric_seq alpha_numeric | ε;
-alpha_numeric = alpha_underscore | digit;
+alpha_numeric = alpha_underscore | dec_digit;
 alpha_underscore = alpha | "_";
 alpha = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
 ```
