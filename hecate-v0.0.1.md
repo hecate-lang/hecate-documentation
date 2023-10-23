@@ -177,18 +177,12 @@ fun entry() {
 The only exception is the `entry` function. As this represents the entry point of the program, it can not be called inside the program itself.
 
 ### Scope Expressions
-Scope expressions are defined as a sequence of statements embraced by curly parenthesis. Every return value of a scope expression must have the same type. One can also optionally supply an expression at the end of a scope expression which serves as an implicit return statement. 
+Scope expressions are defined as a sequence of statements embraced by curly parenthesis. Every return value of a scope expression must have the same type. One can also optionally supply an expression at the end of a scope which is what the scope evaluates to. 
 
 ```
 {
   let a = 10;
-  let b = 100;
-  return a + b;
-}
-
-{
-  let a = 10;
-  a // implicit return
+  a
 }
 ```
 
@@ -234,7 +228,7 @@ If expressions that do not have an else case implicitly return the unit type. Th
 The unit type is returned by expressions and functions that do not return anything. It is denoted as the empty tuple `()`. The unit can be used in the same way as any other type.
 
 ## Never Type
-The never type can never be constructed. It is mainly used for compile-time type checks and promises that code is unreachable. The never type is represented by `!`. Even though currently not in use, it is reserved for future versions.
+The never type can never be constructed. It is mainly used for compile-time type checks and promises that code is unreachable. The never type is represented by `!`.
 
 ## Comments
 Hecate uses C-style comments like so:
@@ -272,6 +266,7 @@ argument_signature = identifier ":" type;
 type = "i8" | "i16" | "i32" | "i64" | "i128" | "u8" | "u16" | "u32" | "u64" | "u128" | "bool" | "()" | "!" | "f32" | "f64";
 
 expression = disjunction;
+expression = return_expression;
 disjunction = disjunction "||" conjunction | conjunction;
 conjunction = conjunction "&&" equation | equation;
 equation = equation "==" ordering | equation "!=" ordering | ordering;
@@ -284,6 +279,7 @@ value = identifier | "(" expression ")" | scope_expression | if_expression | typ
 
 scope_expression  = "{" statements "}" | "{" statements expression "}";
 if_expression = "if" expression scope_expression | "if" expression scope_expression "else" if_expression | "if" expression scope_expression "else" scope_expression; 
+return_expression = "return" | "return" expression; 
 function_call = identifier "(" expression_sequence ")" | identifier "(" ")";
 expression_sequence = expression_sequence "," expression | expression;
 
