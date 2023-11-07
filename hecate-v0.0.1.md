@@ -38,7 +38,7 @@ type = "i8" | "i16" | "i32" | "i64" | "i128" | "u8" | "u16" | "u32" | "u64" | "u
 This section describes the various primitive types of Hecate. Primitive types are copy by default. 
 
 ### Integer Types
-Hecate supports a whole range of different signed and unsigned integer types. These are the signed types `i8, i16, i32, i64, i128` and the unsigned types `u8, u16, u32, u64, u128`. The number of a type denotes its bit size. Supported integer formats are decimal, hexadecimal, binary and octal.
+Hecate supports a whole range of different signed and unsigned integer types. These are the signed types `i8, i16, i32, i64, i128` and the unsigned types `u8, u16, u32, u64, u128`. The number of a type denotes its bit size. Supported integer formats are decimal, hexadecimal, binary and octal. `_` is a visual separator in int literals without any functionality.
 
 ### Floating-point Types
 Like in most programming languages, two differently sized floating-point numbers are available, namely `f32` and `f64`. Both decimal and fractional part are currently required. The scientific notation is also supported.
@@ -342,14 +342,18 @@ let_binding = "let" identifier ":" type "=" expression ";";
 
 typed_integer = integer | integer type;
 integer = "0b" bin_integer | "0o" oct_integer | "0d" decimal_integer | decimal_integer | "ox" hex_integer;
-bin_integer = bin_integer bin_digit | bin_digit;
-oct_integer = oct_integer oct_digit | oct_digit;
-dec_integer = dec_integer dec_digit | dec_digit;
-hex_integer = hex_integer hex_digit | hex_digit;
+bin_integer = bin_integer bin_char | bin_char;
+oct_integer = oct_integer oct_char | oct_char;
+dec_integer = dec_integer dec_char | dec_char;
+hex_integer = hex_integer hex_char | hex_char;
 bin_digit = "0" | "1";
+bin_char = bin_digit | "_"
 oct_digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7";
+oct_char = oct_digit | "_"
 dec_digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+dec_char = dec_digit | "_"
 hex_digit = dec_digit | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f";
+hex_char = hex_digit | "_"
 
 boolean = "true" | "false";
 scientific_rational = rational | rational "e" integer | rational "e" "-" integer;
