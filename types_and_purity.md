@@ -107,5 +107,7 @@ struct MaybeMut<stasis M, T> {
 }
 
 type SurelyMut<T> = mut MaybeMut<mut, T>;
-type NotMut<T> = mut MaybeMut<mut, T>;
+// compiler warning for "unneccessary mutablitly qualifier"
+type NotMutButItTries<T> = mut MaybeMut<nomut, T>;
+type NotMut<T> = MaybeMut<nomut, T>;
 ```
